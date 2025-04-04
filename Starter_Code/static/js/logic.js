@@ -1,14 +1,21 @@
 // Create the 'basemap' tile layer that will be the background of our map.
-
+let basemap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
 
 // OPTIONAL: Step 2
 // Create the 'street' tile layer as a second background of the map
 
 
 // Create the map object with center and zoom options.
+// Centered map on Los Angeles
+let map = L.map("map-id", {
+  center: [34.052235, -118.243683],
+  zoom: 13,
+  // Then add the 'basemap' tile layer to the map.
+  layers: [basemap]
+});
 
-
-// Then add the 'basemap' tile layer to the map.
 
 // OPTIONAL: Step 2
 // Create the layer groups, base maps, and overlays for our two sets of data, earthquakes and tectonic_plates.
@@ -22,18 +29,30 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   // the map. Pass the magnitude and depth of the earthquake into two separate functions
   // to calculate the color and radius.
   function styleInfo(feature) {
-
+    // Create a variable to hold the magnitude data
+    let magnitude = feature.features.mag;
+    // Initialize an array to hold the magnitude array
+    let magnitudeMarkers = [];
   }
 
   // This function determines the color of the marker based on the depth of the earthquake.
   function getColor(depth) {
-
+    // Create a variable to hold the depth, which is in the coordiates array
+    let depthCoordinate = depth.geometry.coordinates[2];
+        // Initialize an array to hold the depth array
+        let depthMarkers = [];
   }
 
   // This function determines the radius of the earthquake marker based on its magnitude.
   function getRadius(magnitude) {
-
-  }
+  // Loop through the data and populate the magnitudeMarkers array
+    for (let i = 0; i < magnitudeMarkers.length; i++) {
+      // Create a new object with properties of both magnitude and depth
+          let mag = Object.assign({}, magnitudeMarkers[i], depthMarkers[i]);
+          // if magnitude is < 1, it's light green. 
+          if (!features.mag < 1) {magnitudeMarkers = {color: "light green"}}
+    }
+  };
 
   // Add a GeoJSON layer to the map once the file is loaded.
   L.geoJson(data, {
