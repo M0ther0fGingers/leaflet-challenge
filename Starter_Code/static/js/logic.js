@@ -37,11 +37,18 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
 
   // This function determines the color of the marker based on the depth of the earthquake.
   function getColor(depth) {
-    // Create a variable to hold the depth, which is in the coordiates array
-    let depthCoordinate = depth.geometry.coordinates[2];
-        // Initialize an array to hold the depth array
-        let depthMarkers = [];
-  }
+    // Initialize an array to hold the depth
+    let depthMarkers = [];
+    // Use .forEach to loop through the array
+      depth.forEach((feature) => {
+      let depthCoordinate = feature.geometry.coordinates[2];
+            // Assign color based on depth. The depth coordinate is measure in kilometers. According to the USGS site
+            // 0-70 km is shallow, 70-300 km is intermediate, and 300-700 km is deep. 
+            let markerColor = depthCoordinate < 70 ? "#d4ff33" : // Light green for a shallow quake
+                              depthCoordinate < 300 ? "#bfe728" : // Medium green for an intermediate quake
+                              depthCoordinate < 700 ? "#829d1b" : "#000000 "; // Dark green for a deep quake, black for all else
+        }
+  };
 
   // This function determines the radius of the earthquake marker based on its magnitude.
   function getRadius(magnitude) {
@@ -49,8 +56,11 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     for (let i = 0; i < magnitudeMarkers.length; i++) {
       // Create a new object with properties of both magnitude and depth
           let mag = Object.assign({}, magnitudeMarkers[i], depthMarkers[i]);
-          // if magnitude is < 1, it's light green. 
-          if (!features.mag < 1) {magnitudeMarkers = {color: "light green"}}
+          // magnitude of quake determines radius of marker. 
+          if (!features.mag < 1) {magnitudeMarkers = {L.circleMarker(magnitudeMarkers[i], {
+            radius: markerSize(magnitudeMarkers[i].)
+          }
+          )}}
     }
   };
 
