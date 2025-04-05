@@ -29,10 +29,8 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   // the map. Pass the magnitude and depth of the earthquake into two separate functions
   // to calculate the color and radius.
   function styleInfo(feature) {
-    // Create a variable to hold the magnitude data
-    let magnitude = feature.features.mag;
-    // Initialize an array to hold the magnitude array
-    let magnitudeMarkers = [];
+
+    
   }
 
   // This function determines the color of the marker based on the depth of the earthquake.
@@ -41,28 +39,33 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     let depthMarkers = [];
     // Use .forEach to loop through the array
       depth.forEach((feature) => {
-      let depthCoordinate = feature.geometry.coordinates[2];
+      let depthCoordinate = feature.features.geometry.coordinates[2];
             // Assign color based on depth. The depth coordinate is measure in kilometers. According to the USGS site
             // 0-70 km is shallow, 70-300 km is intermediate, and 300-700 km is deep. 
             let markerColor = depthCoordinate < 70 ? "#d4ff33" : // Light green for a shallow quake
                               depthCoordinate < 300 ? "#bfe728" : // Medium green for an intermediate quake
                               depthCoordinate < 700 ? "#829d1b" : "#000000 "; // Dark green for a deep quake, black for all else
-        }
+            depthMarkers.push(markerColor)
+                            });
   };
 
   // This function determines the radius of the earthquake marker based on its magnitude.
   function getRadius(magnitude) {
-  // Loop through the data and populate the magnitudeMarkers array
-    for (let i = 0; i < magnitudeMarkers.length; i++) {
-      // Create a new object with properties of both magnitude and depth
-          let mag = Object.assign({}, magnitudeMarkers[i], depthMarkers[i]);
-          // magnitude of quake determines radius of marker. 
-          if (!features.mag < 1) {magnitudeMarkers = {L.circleMarker(magnitudeMarkers[i], {
-            radius: markerSize(magnitudeMarkers[i].)
-          }
-          )}}
-    }
-  };
+    // Initalize an array to hold the radius
+    let magnitudeMarkers = [];
+    // use forEach to find all radii
+    features.properties.mag.forEach((feature) => {
+      // Get the earthquate magnitude
+      let magnitude = features.properties.mag;
+      // Get the coordinates
+      let coordinates = features.geometry.coordinates;
+      // Assign radius based on magnitude. 
+      let radius = markerSize(magnitude);  
+      // Add the popup to the map
+      // }.bindPopup(`</h1> <hr> <h3>Magnitude: ${properties[i].mag.toLocaleString()}</h3>`).addTo(myMap);
+      // magnitudeMarkers.push(radius)
+    )
+    });
 
   // Add a GeoJSON layer to the map once the file is loaded.
   L.geoJson(data, {
